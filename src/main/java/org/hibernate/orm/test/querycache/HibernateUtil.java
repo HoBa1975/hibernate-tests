@@ -38,7 +38,6 @@ public class HibernateUtil {
     private static SessionFactory makeSessionFactory(ServiceRegistry serviceRegistry) {
         MetadataSources metadataSources = new MetadataSources(serviceRegistry);
 
-//        metadataSources.addPackage("com.baeldung.hibernate.pojo");
         metadataSources.addAnnotatedClass(Grantee.class);
         metadataSources.addAnnotatedClass(Account.class);
         metadataSources.addAnnotatedClass(InternalAccount.class);
