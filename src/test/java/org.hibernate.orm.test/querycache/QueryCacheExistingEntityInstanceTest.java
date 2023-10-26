@@ -7,6 +7,7 @@ import org.hibernate.orm.test.querycache.pojo.DatabaseAccount;
 import org.hibernate.orm.test.querycache.pojo.Grantee;
 import org.hibernate.orm.test.querycache.pojo.InternalAccount;
 import org.hibernate.orm.test.querycache.pojo.TestEntity;
+import org.hibernate.orm.test.querycache.pojo.User;
 import org.hibernate.stat.spi.StatisticsImplementor;
 import org.hibernate.testing.orm.junit.DomainModel;
 import org.hibernate.testing.orm.junit.ServiceRegistry;
@@ -20,13 +21,15 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DomainModel(annotatedClasses = {
         Grantee.class,
         Account.class,
         InternalAccount.class,
         DatabaseAccount.class,
-        TestEntity.class
+        TestEntity.class,
+        User.class
 })
 
 @SessionFactory(generateStatistics = true)
@@ -44,13 +47,22 @@ public class QueryCacheExistingEntityInstanceTest {
     @BeforeAll
     public void setUp(SessionFactoryScope scope) {
         scope.inTransaction(session -> {
-            DatabaseAccount acc1 = new DatabaseAccount("A", "DB_A");
+            User user1 = new User("USER_ID_A", "Doe", "John");
+            session.persist(user1);
+            User user2 = new User("USER_ID_B", "Doe", "Jane");
+            session.persist(user2);
+            User user3 = new User("USER_ID_C", "Doe", "Helga");
+            session.persist(user3);
+            User user4 = new User("USER_ID_D", "Doe", "Hugo");
+            session.persist(user4);
+
+            DatabaseAccount acc1 = new DatabaseAccount("A", "DB_A", user1);
             session.persist(acc1);
-            DatabaseAccount acc2 = new DatabaseAccount("B", "DB_B");
+            DatabaseAccount acc2 = new DatabaseAccount("B", "DB_B", user2);
             session.persist(acc2);
-            DatabaseAccount acc3 = new DatabaseAccount("C", "DB_C");
+            DatabaseAccount acc3 = new DatabaseAccount("C", "DB_C", user3);
             session.persist(acc3);
-            InternalAccount acc4 = new InternalAccount("D", "INT_D");
+            InternalAccount acc4 = new InternalAccount("D", "INT_D", user4);
             session.persist(acc4);
 
             TestEntity e1 = new TestEntity("A", "Entity_A", acc2);
@@ -109,6 +121,7 @@ public class QueryCacheExistingEntityInstanceTest {
                 .setCacheRegion(Grantee.class.getSimpleName() + ".QUERYCACHE")
                 .getSingleResult();
         assertEquals(NAME, entity.getLoginName());
+        assertNotNull(entity.getUser());
     }
 }
 
