@@ -10,6 +10,7 @@ import org.hibernate.orm.test.querycache.pojo.DatabaseAccount;
 import org.hibernate.orm.test.querycache.pojo.Grantee;
 import org.hibernate.orm.test.querycache.pojo.InternalAccount;
 import org.hibernate.orm.test.querycache.pojo.TestEntity;
+import org.hibernate.orm.test.querycache.pojo.User;
 import org.hibernate.service.ServiceRegistry;
 
 import java.io.FileInputStream;
@@ -43,6 +44,7 @@ public class HibernateUtil {
         metadataSources.addAnnotatedClass(InternalAccount.class);
         metadataSources.addAnnotatedClass(DatabaseAccount.class);
         metadataSources.addAnnotatedClass(TestEntity.class);
+        metadataSources.addAnnotatedClass(User.class);
 
         Metadata metadata = metadataSources.getMetadataBuilder()
                 .build();
