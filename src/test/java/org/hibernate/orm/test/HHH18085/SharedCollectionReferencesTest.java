@@ -1,14 +1,14 @@
-package org.hibernate.orm.test.HHHxxxxx;
+package org.hibernate.orm.test.HHH18085;
 
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.engine.spi.SessionImplementor;
-import org.hibernate.orm.test.HHHxxxxx.pojo.Account;
-import org.hibernate.orm.test.HHHxxxxx.pojo.DatabaseAccount;
-import org.hibernate.orm.test.HHHxxxxx.pojo.DomainAccount;
-import org.hibernate.orm.test.HHHxxxxx.pojo.Grantee;
-import org.hibernate.orm.test.HHHxxxxx.pojo.InternalAccount;
-import org.hibernate.orm.test.HHHxxxxx.pojo.TestEntity;
-import org.hibernate.orm.test.HHHxxxxx.pojo.User;
+import org.hibernate.orm.test.HHH18085.pojo.Account;
+import org.hibernate.orm.test.HHH18085.pojo.DatabaseAccount;
+import org.hibernate.orm.test.HHH18085.pojo.DomainAccount;
+import org.hibernate.orm.test.HHH18085.pojo.Grantee;
+import org.hibernate.orm.test.HHH18085.pojo.InternalAccount;
+import org.hibernate.orm.test.HHH18085.pojo.TestEntity;
+import org.hibernate.orm.test.HHH18085.pojo.User;
 import org.hibernate.stat.spi.StatisticsImplementor;
 import org.hibernate.testing.orm.junit.DomainModel;
 import org.hibernate.testing.orm.junit.ServiceRegistry;

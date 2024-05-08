@@ -1,4 +1,4 @@
-package org.hibernate.orm.test.HHHxxxxx.pojo;
+package org.hibernate.orm.test.HHH18085.pojo;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
