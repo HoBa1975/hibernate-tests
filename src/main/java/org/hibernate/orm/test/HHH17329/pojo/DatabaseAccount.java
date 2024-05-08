@@ -1,4 +1,4 @@
-package org.hibernate.orm.test.querycache.pojo;
+package org.hibernate.orm.test.HHH17329.pojo;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
