@@ -1,4 +1,4 @@
-package org.hibernate.orm.test.querycache.pojo;
+package org.hibernate.orm.test.HHH18085.pojo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
