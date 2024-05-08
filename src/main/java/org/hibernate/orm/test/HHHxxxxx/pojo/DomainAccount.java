@@ -1,4 +1,4 @@
-package org.hibernate.orm.test.pojo;
+package org.hibernate.orm.test.HHHxxxxx.pojo;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,6 +14,7 @@ import org.hibernate.annotations.FetchMode;
 public class DomainAccount {
     @Id
     public String id;
+
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Account.class)
     @Fetch(FetchMode.SELECT)
     public Account account;

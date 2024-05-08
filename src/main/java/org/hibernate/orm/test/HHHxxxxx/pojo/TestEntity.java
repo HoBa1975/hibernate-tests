@@ -1,4 +1,4 @@
-package org.hibernate.orm.test.pojo;
+package org.hibernate.orm.test.HHHxxxxx.pojo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

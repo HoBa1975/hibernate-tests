@@ -1,14 +1,13 @@
-package org.hibernate.orm.test;
+package org.hibernate.orm.test.HHH17329;
 
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.engine.spi.SessionImplementor;
-import org.hibernate.orm.test.pojo.Account;
-import org.hibernate.orm.test.pojo.DatabaseAccount;
-import org.hibernate.orm.test.pojo.DomainAccount;
-import org.hibernate.orm.test.pojo.Grantee;
-import org.hibernate.orm.test.pojo.InternalAccount;
-import org.hibernate.orm.test.pojo.TestEntity;
-import org.hibernate.orm.test.pojo.User;
+import org.hibernate.orm.test.HHH17329.pojo.Account;
+import org.hibernate.orm.test.HHH17329.pojo.DatabaseAccount;
+import org.hibernate.orm.test.HHH17329.pojo.Grantee;
+import org.hibernate.orm.test.HHH17329.pojo.InternalAccount;
+import org.hibernate.orm.test.HHH17329.pojo.TestEntity;
+import org.hibernate.orm.test.HHH17329.pojo.User;
 import org.hibernate.stat.spi.StatisticsImplementor;
 import org.hibernate.testing.orm.junit.DomainModel;
 import org.hibernate.testing.orm.junit.ServiceRegistry;
@@ -21,7 +20,8 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DomainModel(annotatedClasses = {
         Grantee.class,
@@ -29,8 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
         InternalAccount.class,
         DatabaseAccount.class,
         TestEntity.class,
-        User.class,
-        DomainAccount.class
+        User.class
 })
 
 @SessionFactory(generateStatistics = true)
@@ -39,11 +38,63 @@ import static org.junit.jupiter.api.Assertions.*;
         @Setting(name = AvailableSettings.USE_SECOND_LEVEL_CACHE, value = "true")
 })
 
-public class SharedCollectionReferencesTest {
+public class QueryCacheContainsNullValuesTest {
     private static final String ENTITYQUERY = "from TestEntity";
     private static final String ACCOUNTQUERY = "from Account";
     private static final String ACCOUNTBYNAMEQUERY = "from Account where name = :name";
     private static final String NAME = "INT_D";
+
+    @BeforeAll
+    public void setUp(SessionFactoryScope scope) {
+        scope.inTransaction(session -> {
+            User user1 = new User("USER_ID_A", "Doe", "John");
+            session.persist(user1);
+            User user2 = new User("USER_ID_B", "Doe", "Jane");
+            session.persist(user2);
+            User user3 = new User("USER_ID_C", "Doe", "Helga");
+            session.persist(user3);
+            User user4 = new User("USER_ID_D", "Doe", "Hugo");
+            session.persist(user4);
+
+            DatabaseAccount acc1 = new DatabaseAccount("A", "DB_A", user1);
+            session.persist(acc1);
+            DatabaseAccount acc2 = new DatabaseAccount("B", "DB_B", user2);
+            session.persist(acc2);
+            DatabaseAccount acc3 = new DatabaseAccount("C", "DB_C", user3);
+            session.persist(acc3);
+            InternalAccount acc4 = new InternalAccount("D", "INT_D", user4);
+            session.persist(acc4);
+
+            TestEntity e1 = new TestEntity("A", "Entity_A", acc2);
+            session.persist(e1);
+            TestEntity e2 = new TestEntity("B", "Entity_B", acc4);
+            session.persist(e2);
+        });
+    }
+
+    @Test
+    public void testNormalBehavior(SessionFactoryScope scope) {
+        testQueryCache(scope, session -> {
+        });
+    }
+
+    private void testQueryCache(SessionFactoryScope scope, Consumer<SessionImplementor> beforeQuery) {
+        scope.getSessionFactory().getCache().evictQueryRegions();
+        final StatisticsImplementor statistics = scope.getSessionFactory().getStatistics();
+        statistics.clear();
+
+        scope.inTransaction(session -> {
+            executeQueryElementFindAll(session);
+            executeQueryAccountFindAll(session);
+        });
+
+
+        scope.inTransaction(QueryCacheContainsNullValuesTest::executeQueryByGivenName);
+    }
+
+    private void executeQueryElementFindAll(SessionImplementor session) {
+        session.createQuery(ENTITYQUERY, TestEntity.class).list();
+    }
 
     private static void executeQueryAccountFindAll(SessionImplementor session) {
         final List<Account> entities = session.createQuery(ACCOUNTQUERY, Account.class)
@@ -71,70 +122,6 @@ public class SharedCollectionReferencesTest {
                 .getSingleResult();
         assertEquals(NAME, entity.getLoginName());
         assertNotNull(entity.getUser());
-        assertTrue(entity.hasDomainAccounts());
-    }
-
-    @BeforeAll
-    public void setUp(SessionFactoryScope scope) {
-        scope.inTransaction(session -> {
-            DomainAccount domainAccount1 = new DomainAccount("DOM_ACC_A");
-            session.persist(domainAccount1);
-            DomainAccount domainAccount4 = new DomainAccount("DOM_ACC_D");
-            session.persist(domainAccount4);
-
-            User user1 = new User("USER_ID_A", "Doe", "John");
-            session.persist(user1);
-            User user2 = new User("USER_ID_B", "Doe", "Jane");
-            session.persist(user2);
-            User user3 = new User("USER_ID_C", "Doe", "Helga");
-            session.persist(user3);
-            User user4 = new User("USER_ID_D", "Doe", "Hugo");
-            session.persist(user4);
-
-            DatabaseAccount acc1 = new DatabaseAccount("A", "DB_A", user1);
-            session.persist(acc1);
-            DatabaseAccount acc2 = new DatabaseAccount("B", "DB_B", user2);
-            session.persist(acc2);
-            DatabaseAccount acc3 = new DatabaseAccount("C", "DB_C", user3);
-            session.persist(acc3);
-            InternalAccount acc4 = new InternalAccount("D", "INT_D", user4);
-            acc4.getDomainAccounts().add(domainAccount4);
-            session.persist(acc4);
-
-            TestEntity e1 = new TestEntity("A", "Entity_A", acc2);
-            session.persist(e1);
-            TestEntity e2 = new TestEntity("B", "Entity_B", acc4);
-            session.persist(e2);
-        });
-    }
-
-    @Test
-    public void testNormalBehavior(SessionFactoryScope scope) {
-        testQueryCache(scope, session -> {
-        });
-    }
-
-    private void testQueryCache(SessionFactoryScope scope, Consumer<SessionImplementor> beforeQuery) {
-        scope.getSessionFactory().getCache().evictQueryRegions();
-        final StatisticsImplementor statistics = scope.getSessionFactory().getStatistics();
-        statistics.clear();
-
-        scope.inTransaction(session -> {
-            executeQueryElementFindAll(session);
-            executeQueryAccountFindAll(session);
-        });
-
-
-//        scope.inTransaction(QueryCacheExistingEntityInstanceTest::executeQueryByGivenName);
-//        scope.inTransaction(QueryCacheExistingEntityInstanceTest::executeQueryByGivenName);
-        scope.inTransaction(session -> {
-            executeQueryByGivenName(session);
-            executeQueryByGivenName(session);
-        });
-    }
-
-    private void executeQueryElementFindAll(SessionImplementor session) {
-        session.createQuery(ENTITYQUERY, TestEntity.class).list();
     }
 }
 
