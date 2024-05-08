@@ -1,16 +1,17 @@
-package org.hibernate.orm.test.querycache;
+package org.hibernate.orm.test;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.orm.test.querycache.pojo.Account;
-import org.hibernate.orm.test.querycache.pojo.DatabaseAccount;
-import org.hibernate.orm.test.querycache.pojo.Grantee;
-import org.hibernate.orm.test.querycache.pojo.InternalAccount;
-import org.hibernate.orm.test.querycache.pojo.TestEntity;
-import org.hibernate.orm.test.querycache.pojo.User;
+import org.hibernate.orm.test.pojo.Account;
+import org.hibernate.orm.test.pojo.DatabaseAccount;
+import org.hibernate.orm.test.pojo.DomainAccount;
+import org.hibernate.orm.test.pojo.Grantee;
+import org.hibernate.orm.test.pojo.InternalAccount;
+import org.hibernate.orm.test.pojo.TestEntity;
+import org.hibernate.orm.test.pojo.User;
 import org.hibernate.service.ServiceRegistry;
 
 import java.io.FileInputStream;
@@ -45,6 +46,7 @@ public class HibernateUtil {
         metadataSources.addAnnotatedClass(DatabaseAccount.class);
         metadataSources.addAnnotatedClass(TestEntity.class);
         metadataSources.addAnnotatedClass(User.class);
+        metadataSources.addAnnotatedClass(DomainAccount.class);
 
         Metadata metadata = metadataSources.getMetadataBuilder()
                 .build();

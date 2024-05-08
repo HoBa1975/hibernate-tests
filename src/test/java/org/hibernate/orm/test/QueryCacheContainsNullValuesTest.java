@@ -1,13 +1,14 @@
-package org.hibernate.orm.test.querycache;
+package org.hibernate.orm.test;
 
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.engine.spi.SessionImplementor;
-import org.hibernate.orm.test.querycache.pojo.Account;
-import org.hibernate.orm.test.querycache.pojo.DatabaseAccount;
-import org.hibernate.orm.test.querycache.pojo.Grantee;
-import org.hibernate.orm.test.querycache.pojo.InternalAccount;
-import org.hibernate.orm.test.querycache.pojo.TestEntity;
-import org.hibernate.orm.test.querycache.pojo.User;
+import org.hibernate.orm.test.pojo.Account;
+import org.hibernate.orm.test.pojo.DatabaseAccount;
+import org.hibernate.orm.test.pojo.DomainAccount;
+import org.hibernate.orm.test.pojo.Grantee;
+import org.hibernate.orm.test.pojo.InternalAccount;
+import org.hibernate.orm.test.pojo.TestEntity;
+import org.hibernate.orm.test.pojo.User;
 import org.hibernate.stat.spi.StatisticsImplementor;
 import org.hibernate.testing.orm.junit.DomainModel;
 import org.hibernate.testing.orm.junit.ServiceRegistry;
@@ -29,7 +30,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
         InternalAccount.class,
         DatabaseAccount.class,
         TestEntity.class,
-        User.class
+        User.class,
+        DomainAccount.class
 })
 
 @SessionFactory(generateStatistics = true)
@@ -38,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
         @Setting(name = AvailableSettings.USE_SECOND_LEVEL_CACHE, value = "true")
 })
 
-public class QueryCacheExistingEntityInstanceTest {
+public class QueryCacheContainsNullValuesTest {
     private static final String ENTITYQUERY = "from TestEntity";
     private static final String ACCOUNTQUERY = "from Account";
     private static final String ACCOUNTBYNAMEQUERY = "from Account where name = :name";
@@ -89,7 +91,7 @@ public class QueryCacheExistingEntityInstanceTest {
         });
 
 
-        scope.inTransaction(QueryCacheExistingEntityInstanceTest::executeQueryByGivenName);
+        scope.inTransaction(QueryCacheContainsNullValuesTest::executeQueryByGivenName);
     }
 
     private void executeQueryElementFindAll(SessionImplementor session) {
