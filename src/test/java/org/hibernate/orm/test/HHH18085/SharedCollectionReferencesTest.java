@@ -8,7 +8,7 @@ import org.hibernate.orm.test.HHH18085.pojo.DomainAccount;
 import org.hibernate.orm.test.HHH18085.pojo.Grantee;
 import org.hibernate.orm.test.HHH18085.pojo.InternalAccount;
 import org.hibernate.orm.test.HHH18085.pojo.TestEntity;
-import org.hibernate.orm.test.HHH18085.pojo.User;
+import org.hibernate.orm.test.HHH18085.pojo.MyUser;
 import org.hibernate.stat.spi.StatisticsImplementor;
 import org.hibernate.testing.orm.junit.DomainModel;
 import org.hibernate.testing.orm.junit.ServiceRegistry;
@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
         InternalAccount.class,
         DatabaseAccount.class,
         TestEntity.class,
-        User.class,
+        MyUser.class,
         DomainAccount.class
 })
 
@@ -82,22 +82,22 @@ public class SharedCollectionReferencesTest {
             DomainAccount domainAccount4 = new DomainAccount("DOM_ACC_D");
             session.persist(domainAccount4);
 
-            User user1 = new User("USER_ID_A", "Doe", "John");
-            session.persist(user1);
-            User user2 = new User("USER_ID_B", "Doe", "Jane");
-            session.persist(user2);
-            User user3 = new User("USER_ID_C", "Doe", "Helga");
-            session.persist(user3);
-            User user4 = new User("USER_ID_D", "Doe", "Hugo");
-            session.persist(user4);
+            MyUser myUser1 = new MyUser("USER_ID_A", "Doe", "John");
+            session.persist(myUser1);
+            MyUser myUser2 = new MyUser("USER_ID_B", "Doe", "Jane");
+            session.persist(myUser2);
+            MyUser myUser3 = new MyUser("USER_ID_C", "Doe", "Helga");
+            session.persist(myUser3);
+            MyUser myUser4 = new MyUser("USER_ID_D", "Doe", "Hugo");
+            session.persist(myUser4);
 
-            DatabaseAccount acc1 = new DatabaseAccount("A", "DB_A", user1);
+            DatabaseAccount acc1 = new DatabaseAccount("A", "DB_A", myUser1);
             session.persist(acc1);
-            DatabaseAccount acc2 = new DatabaseAccount("B", "DB_B", user2);
+            DatabaseAccount acc2 = new DatabaseAccount("B", "DB_B", myUser2);
             session.persist(acc2);
-            DatabaseAccount acc3 = new DatabaseAccount("C", "DB_C", user3);
+            DatabaseAccount acc3 = new DatabaseAccount("C", "DB_C", myUser3);
             session.persist(acc3);
-            InternalAccount acc4 = new InternalAccount("D", "INT_D", user4);
+            InternalAccount acc4 = new InternalAccount("D", "INT_D", myUser4);
             acc4.getDomainAccounts().add(domainAccount4);
             session.persist(acc4);
 

@@ -2,13 +2,6 @@ package org.hibernate.orm.test.HHH18413;
 
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.engine.spi.SessionImplementor;
-import org.hibernate.orm.test.HHH18085.pojo.Account;
-import org.hibernate.orm.test.HHH18085.pojo.DatabaseAccount;
-import org.hibernate.orm.test.HHH18085.pojo.DomainAccount;
-import org.hibernate.orm.test.HHH18085.pojo.Grantee;
-import org.hibernate.orm.test.HHH18085.pojo.InternalAccount;
-import org.hibernate.orm.test.HHH18085.pojo.TestEntity;
-import org.hibernate.orm.test.HHH18085.pojo.User;
 import org.hibernate.orm.test.HHH18413.pojo.AbstractVersion;
 import org.hibernate.orm.test.HHH18413.pojo.Element;
 import org.hibernate.orm.test.HHH18413.pojo.ElementClass;
@@ -22,7 +15,6 @@ import org.hibernate.testing.orm.junit.Setting;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;

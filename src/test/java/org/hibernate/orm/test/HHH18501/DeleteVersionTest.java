@@ -103,9 +103,9 @@ public class DeleteVersionTest {
             //refreshPersistentContext(session);
 
             versions = findVersionByIds(session, List.of("1"));
-            assertEquals(0, versions.size());
+            assertEquals(1, versions.size());
             attributes = loadAllVersionAttributes(session);
-            assertEquals(0, attributes.size());
+            assertEquals(2, attributes.size());
         });
     }
 

@@ -25,10 +25,10 @@ public abstract class Account extends Grantee {
     @Column(name = "STATE", nullable = false)
     public String state;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = MyUser.class)
     @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "USER_ID", nullable = false)
-    private User user;
+    private MyUser myUser;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL, targetEntity =
             DomainAccount.class)
@@ -51,13 +51,13 @@ public abstract class Account extends Grantee {
         this.domainAccounts = new HashSet<>();
     }
 
-    public Account(String id, String name, User user) {
+    public Account(String id, String name, MyUser myUser) {
         super(id);
         this.setGranteeType("U");
         this.setAuthType("none");
         this.name = name;
         this.state = "O";
-        this.user = user;
+        this.myUser = myUser;
         this.domainAccounts = new HashSet<>();
     }
 
@@ -65,8 +65,8 @@ public abstract class Account extends Grantee {
         return name;
     }
 
-    public User getUser() {
-        return user;
+    public MyUser getUser() {
+        return myUser;
     }
 
     public Set<DomainAccount> getDomainAccounts() {

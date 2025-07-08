@@ -17,8 +17,8 @@ public class DatabaseAccount extends Account {
         this.setAuthType("database");
     }
 
-    public DatabaseAccount(String id, String loginName, User user) {
-        super(id, loginName, user);
+    public DatabaseAccount(String id, String loginName, MyUser myUser) {
+        super(id, loginName, myUser);
         this.setAuthType("database");
     }
 }

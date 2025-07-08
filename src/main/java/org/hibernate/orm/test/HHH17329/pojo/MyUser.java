@@ -8,9 +8,9 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
-@Table(name = "User")
+@Table(name = "MyUser")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class User {
+public class MyUser {
     @Id
     @Column(name = "USER_ID")
     private String id;
@@ -21,11 +21,11 @@ public class User {
     @Column(name = "VORNAME")
     private String firstName;
 
-    public User() {
+    public MyUser() {
 
     }
 
-    public User(String id, String lastName, String firstName) {
+    public MyUser(String id, String lastName, String firstName) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
