@@ -90,11 +90,10 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
 
-        <hibernate.version>6.6.0.Final</hibernate.version>
+        <hibernate.version>6.6.1.Final</hibernate.version>
         <h2.version>1.4.197</h2.version>
         <commons-lang3.version>3.16.0</commons-lang3.version>
         <junit-jupiter.version>5.11.0</junit-jupiter.version>
         <assertj.version>3.26.3</assertj.version>
     </properties>
-
 </project>
